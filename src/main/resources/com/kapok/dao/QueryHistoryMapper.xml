@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kapok.dao.QueryHistoryDao">
+
+    <resultMap id="QueryHistoryMap" type="com.kapok.model.po.QueryHistoryPO">
+        <id column="query_id" jdbcType="VARCHAR" property="queryId"/>
+        <result column="query_text" jdbcType="VARCHAR" property="queryText"/>
+        <result column="created" jdbcType="BIGINT" property="createdTime"/>
+        <result column="backend_url" jdbcType="VARCHAR" property="backendUrl"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="source" jdbcType="VARCHAR" property="source"/>
+    </resultMap>
+    
+    <select id="getAllQueryHistory" resultMap="QueryHistoryMap">
+        select * from query_history
+    </select>
+
+    <select id="getQueryHistoryByQueryId" resultMap="QueryHistoryMap">
+        select * from query_history where query_id = #{queryId}
+    </select>
+
+    <select id="getQueryHistoryByUserName" resultMap="QueryHistoryMap">
+        select * from query_history where user_name = #{userName}
+    </select>
+
+    <insert id="saveQueryHistory" parameterType="com.kapok.model.po.QueryHistoryPO">
+        insert into query_history (`query_id`, `created`, `backend_url`, `user_name`, `source`)
+        value (#{queryId}, #{createdTime}, #{backendUrl}, #{userName}, #{source})
+    </insert>
+
+</mapper>

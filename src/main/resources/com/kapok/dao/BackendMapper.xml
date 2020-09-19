@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kapok.dao.BackendDao">
+
+    <resultMap id="BackendMap" type="com.kapok.model.po.BackendPO">
+        <id column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="routing_group" jdbcType="VARCHAR" property="routingGroup"/>
+        <result column="backend_url" jdbcType="VARCHAR" property="backendUrl"/>
+        <result column="active" jdbcType="TINYINT" property="active"/>
+    </resultMap>
+    
+    <select id="getAllBackends" resultMap="BackendMap">
+        select * from gateway_backend
+    </select>
+
+    <select id="getAllActiveBackends" resultMap="BackendMap">
+        select * from gateway_backend where active = 1
+    </select>
+
+    <select id="getActiveAdhocBackends" resultMap="BackendMap">
+        select * from gateway_backend where routing_group = 'adhoc' and active = 1
+    </select>
+
+    <select id="getActiveBackends" resultMap="BackendMap">
+        select * from gateway_backend where routing_group = #{routingGroup} and active = 1
+    </select>
+
+    <insert id="addBackend" parameterType="com.kapok.model.po.BackendPO">
+        insert into gateway_backend (`name`, `routing_group`, `backend_url`, `active`)
+        value (#{name}, #{routingGroup}, #{backendUrl}, #{active})
+    </insert>
+
+
+    <update id="updateBackend" parameterType="com.kapok.model.po.BackendPO">
+        update gateway_backend set `routing_group` = #{routingGroup}, `backend_url` = #{backendUrl}, `active`= #{active}
+        where `name` = #{name}
+    </update>
+
+
+    <update id="deactiveBackend" parameterType="java.lang.String">
+        update gateway_backend set `active`= 0
+        where `name` = #{name}
+    </update>
+
+    <update id="activeBackend" parameterType="java.lang.String">
+        update gateway_backend set `active`= 1
+        where `name` = #{name}
+    </update>
+
+</mapper>
